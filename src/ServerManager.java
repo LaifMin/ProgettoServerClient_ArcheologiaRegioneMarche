@@ -20,32 +20,24 @@ public class ServerManager implements Runnable {
         ) {
 
          
-            out.print("Hello (END to close connection): \n");
+            out.println("Hello (END to close connection): \n");
             out.flush();
 
            
             while (true) {
                 String str = in.readLine();
                 String msg = analyzeReturnMsg(str);
-                if (msg.equals("END")) {
-                    out.println("Connection closed.");
-                    break;
-                } else if (msg.equals("ERROR: Invalid command format.")) {
-                    out.println(msg+"\n");
-                } else if (msg.equals("Everything will be uppercase")) {
-                    upper = true;
+            
+                if(msg != null){
                     out.println(msg);
-                } else if (msg.equals("Everything will be lowercase")) {
-                    upper = false;
-                    out.println(msg);
-                } else if (msg.startsWith("Unknown command: ")) {
-                    out.println(msg);
+                    out.flush();
+                }else{
+                    out.println("#");
+                    out.flush();
+                    continue;
 
-                } else {
-                    String response = upper ? msg.toUpperCase() : msg.toLowerCase(); //If upper is true, convert to uppercase, otherwise to lowercase
-                    out.println(response);
                 }
-              
+
 
             }
         } catch (IOException e) {
@@ -69,10 +61,8 @@ public class ServerManager implements Runnable {
         }
         String command = parts[0].toUpperCase();
         switch (command) {
-            case "UPPER":
-                return "Everything will be uppercase";
-            case "LOWER":
-                return "Everything will be lowercase";
+            case "END":
+                return null; 
             case "GET_ROW":
                 if (parts.length != 2) {
                     return "ERROR: Invalid command format. Use GET_ROW <index>";
@@ -89,6 +79,15 @@ public class ServerManager implements Runnable {
                     return "ERROR: Invalid row index format. Must be an integer.";
                     
                 }
+
+            case "GET_SIZE":
+                return String.valueOf(dataManager.returnSize());
+
+            case "GET_ALL":
+                return dataManager.getDataAsString().toString();
+            
+           
+
             default:
                 return "Unknown command: " + command;
         }
