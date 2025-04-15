@@ -1,5 +1,6 @@
-public class Data  {
-    
+package BusinessLogic;
+public class Data  implements Comparable {
+   
     private String urlImmagine;
     private String didascalia;
     private String tipologiaPDI;
@@ -13,6 +14,8 @@ public class Data  {
     private String latitudine;
     private String longitudine;
     private String orariDiApertura;
+
+
 
 
     public Data(String urlImmagine, String didascalia, String tipologiaPDI, String denominazione, String comune,
@@ -34,9 +37,13 @@ public class Data  {
     }
 
 
+
+
     public String getUrlImmagine() {
         return urlImmagine;
     }
+
+
 
 
     public String getDidascalia() {
@@ -44,9 +51,13 @@ public class Data  {
     }
 
 
+
+
     public String getTipologiaPDI() {
         return tipologiaPDI;
     }
+
+
 
 
     public String getDenominazione() {
@@ -54,9 +65,13 @@ public class Data  {
     }
 
 
+
+
     public String getComune() {
         return comune;
     }
+
+
 
 
     public String getIndirizzo() {
@@ -64,9 +79,13 @@ public class Data  {
     }
 
 
+
+
     public String getCivico() {
         return civico;
     }
+
+
 
 
     public String getTelefono() {
@@ -74,9 +93,13 @@ public class Data  {
     }
 
 
+
+
     public String getEmail() {
         return email;
     }
+
+
 
 
     public String getUrlSitoWeb() {
@@ -84,9 +107,13 @@ public class Data  {
     }
 
 
+
+
     public String getLatitudine() {
         return latitudine;
     }
+
+
 
 
     public String getLongitudine() {
@@ -94,9 +121,13 @@ public class Data  {
     }
 
 
+
+
     public String getOrariDiApertura() {
         return orariDiApertura;
     }
+
+
 
 
     @Override
@@ -108,9 +139,25 @@ public class Data  {
                 + "]";
     }
 
-    
 
-    
-    
-    
+
+
+    @Override
+    public int compareTo(Object o) {
+
+
+        if (o instanceof Data) {
+            Data other = (Data) o;
+            return this.denominazione.compareTo(other.denominazione);
+        }
+        return 0;
+    }
+
+
+   
+
+
+   
+   
+   
 }
