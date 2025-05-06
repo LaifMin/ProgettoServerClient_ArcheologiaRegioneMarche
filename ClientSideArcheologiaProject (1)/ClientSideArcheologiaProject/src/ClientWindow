@@ -1,0 +1,135 @@
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ClientWindow extends Thread {
+    public final int ALTEZZA = 600;
+    public final int LUNGEZZA = 800;
+    public JTextArea comandLineArea = new JTextArea();
+    private JTextField commandInput;
+    private JFrame f = new JFrame();
+    private static final String [] tableObjects = {"urlImmagine", "didascalia", "tipologiaPDI", "denominazione", "comune",
+                            "indirizzo", "civico", "telefono", "email", "urlSitoWeb", "latitudine",
+                            "longitudine", "orariDiApertura"};
+
+    private JTable dataTable;
+    private DefaultTableModel tableModel;
+
+    public ClientWindow() {}
+
+    public JFrame getFrame() {
+        return f;
+    }
+
+    @Override
+    public void run() {
+        windowDraw();
+    }
+
+    public void windowDraw() {
+        f.setSize(LUNGEZZA, ALTEZZA);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setLocationRelativeTo(null);
+        f.setLayout(new BorderLayout());
+
+        f.add(commandLine(), BorderLayout.WEST);
+        f.add(table(),BorderLayout.CENTER);
+
+        f.setVisible(true);
+    }
+
+    public JPanel commandLine() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        JScrollPane scrollPane = new JScrollPane(comandLineArea);
+
+        comandLineArea.setEditable(false);
+        comandLineArea.setLineWrap(true);
+        comandLineArea.setWrapStyleWord(true);
+        scrollPane.setPreferredSize(new Dimension(300, 400));
+
+        commandInput = new JTextField();
+        commandInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String command = commandInput.getText();
+                if (command.equals("END")){
+                    ClientManager.exit = true;
+                    f.dispose();
+                }
+                System.out.println("command GUI: " + command);
+                ClientManager.setOutToServer(command);
+                commandInput.setText("");
+            }
+        });
+
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(commandInput, BorderLayout.SOUTH);
+        panel.setBorder(BorderFactory.createTitledBorder("Command Line"));
+        return panel;
+    }
+
+    public JPanel table() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        tableModel = new DefaultTableModel(tableObjects, 0);
+
+        dataTable = new JTable(tableModel);
+        dataTable.setFillsViewportHeight(true);
+
+        JScrollPane scrollPane = new JScrollPane(dataTable);
+        scrollPane.setPreferredSize(new Dimension(450, 1000));
+
+        panel.setBorder(BorderFactory.createTitledBorder("Table"));
+        panel.add(scrollPane, BorderLayout.CENTER);
+        return panel;
+    }
+
+    public void dataProcessing(String response){
+        String [] records = response.split("\\$");
+        for (int i = 1; i < records.length; i++) {
+            String record = records[i];
+            String[] values = record.split("\\|");
+            addRowToTable(values);
+        }
+    }
+
+    // Method for adding a row of data to the table
+    public void addRowToTable(Object[] rowData) {
+        if (tableModel != null) {
+            tableModel.addRow(rowData);
+        }
+    }
+
+    // Method to clear all rows from a table
+    public void clearTable() {
+        if (tableModel != null) {
+            tableModel.setRowCount(0);
+        }
+    }
+
+    // Method for getting text from the command area (JTextArea)
+    public String getCommandLineAreaText() {
+        return comandLineArea.getText();
+    }
+
+    // Method for setting text in the command area (JTextArea)
+    public void setCommandLineAreaText(String text) {
+        comandLineArea.setText(text);
+    }
+
+    // Method for getting text from the command input field (JTextField)
+    public String getCommandInputText() {
+        return commandInput.getText();
+    }
+
+    // Method for setting text in the command input field (JTextField)
+    public void setCommandInputText(String text) {
+        commandInput.setText(text);
+    }
+
+}
