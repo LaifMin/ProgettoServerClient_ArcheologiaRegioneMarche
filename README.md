@@ -1,18 +1,52 @@
-## Getting Started
+# Cultural Heritage Data Management System 🏛️
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+This project is an academic initiative designed for managing cultural heritage data. It includes both a server and client component along with a command-based interface for searching and managing cultural heritage entries.
 
-## Folder Structure
+## 📋 Requirements
 
-The workspace contains two folders by default, where:
+- **Java 17+**
+- **Maven 3.6+**
+- Data file: `Archeologia---Storia-e-Tradizioni---Regione-Marche.csv`
+- All text files must be encoded in **UTF-8**
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## 🚀 Installation
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+Clone the repository :
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+# Clone repository
+git clone https://github.com/LaifMin/ProgettoServerClient_ArcheologiaRegioneMarche.git
 
-## Dependency Management
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## ⌨️ Command Reference
+ Basic Commands   Command	Description
+                 
+HELP	            Show command reference
+END              	Disconnect from server
+
+Search Operations
+Search commands follow this syntax:
+
+
+SEARCH [OPTION] "QUERY"
+Option	Search Type	Example
+-n	Exact name	SEARCH -n "Castelldimezzo"
+
+-c	Exact city	SEARCH -c Ancona
+
+-t	Exact type	SEARCH -t Archeologia
+
+-a	Exact address	SEARCH -a "Via Ferretti"
+
+--n	Partial name	SEARCH --n castle
+
+--c	Partial city	SEARCH --c piceno
+
+--t	Partial type	SEARCH --t paesaggio
+
+--a	Partial address	SEARCH --a piazza
+
+-o	Opening days	SEARCH -o lunedì
+
+## 📊 Data Format
+The system expects data in the following format:
+ImageURL;Caption;Type;Name;City;Address;Number;Phone;Email;Website;Latitude;Longitude;OpeningHours
