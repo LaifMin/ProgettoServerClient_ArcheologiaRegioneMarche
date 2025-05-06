@@ -10,7 +10,9 @@ import java.util.Scanner;
 public class ClientManager {
     final static String nomeServer = "localhost";
     final static int portaServer = 1050;
-
+    private static PrintWriter outToServer;
+    public static boolean exit = false;
+    static ClientWindow clientWindow = new ClientWindow();
     public static void main(String[] args) {
         System.out.println("Connessione al server in corso...");
         try (Socket sck = new Socket(nomeServer, portaServer)) {
@@ -18,6 +20,7 @@ public class ClientManager {
             String loc = sck.getLocalSocketAddress().toString();
             System.out.format("Server (remoto): %s%n", rem);
             System.out.format("Client (locale): %s%n", loc);
+            clientWindow.start();
             comunica(sck);
         } catch (UnknownHostException e) {
             System.err.format("Nome di server non valido: %s%n", e.getMessage());
@@ -36,11 +39,11 @@ public class ClientManager {
         if(!risposta.equalsIgnoreCase("Hello (END to close connection): ")){
             System.out.println("Connection dead");
         }
-        System.out.println("Server: " + risposta);
+        System.out.println("Server: " + risposta );
         boolean exitCondition = false;
         do {
             risposta = in.readLine();
-            System.out.println(risposta);
+            System.out.println(risposta+"\n");
 
          
             String comando = scanner.nextLine();
@@ -50,5 +53,20 @@ public class ClientManager {
 
         } while (!exitCondition);
         scanner.close();
+    }
+
+
+    public static void setOutToServer(String msg) {
+        if (outToServer != null) {
+            outToServer.println(msg);
+            outToServer.flush();
+        } else {
+            System.err.println("Error: outToServer not initialized.");
+        }
+    }
+
+
+    public static void initOutToServer(Socket sck) throws IOException {
+        outToServer = new PrintWriter(new OutputStreamWriter(sck.getOutputStream()), true);
     }
 }
