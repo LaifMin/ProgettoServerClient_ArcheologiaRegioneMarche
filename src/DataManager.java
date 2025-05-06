@@ -12,7 +12,7 @@ public class DataManager {
 
     private ArrayList<Data> dataStructure = new ArrayList<>();
     private static DataManager instance = null; // Singleton instance
-    private static final String FILE_NAME = "Archeologia---Storia-e-Tradizioni---Regione-Marche.csv";
+    private static final String FILE_NAME = "./Archeologia---Storia-e-Tradizioni---Regione-Marche.csv";
     private static final String FILE_PATH = new File(FILE_NAME).getAbsolutePath();
 
 
